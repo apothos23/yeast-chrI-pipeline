@@ -12,14 +12,14 @@ for record in SeqIO.parse(fasta_file, "fasta-blast"):
     count_T = dna.count("T")
     total_length = len(dna)
     gc_percent = (count_G+count_C)/(count_A+count_C+count_G+count_T)*100
-    print(f"Το μήκος του χρωμοσώματος είναι: {total_length} βάσεις")
+    print(f"Chromosome length: {total_length} bases")
     print(f"A: {count_A}, C: {count_C}, G: {count_G}, T: {count_T}")
-    print(f"Ποσοστό GC: {gc_percent}%")
+    print(f"GC percentage: {gc_percent}%")
 
 report = (
-    f"Συνολικό μήκος: {total_length} βάσεις/n"
+    f"Total length: {total_length} bases/n"
     f"A: {count_A}, C: {count_C}, T: {count_T}, G: {count_G}/n"
-    f"Ποσοστό GC: {gc_percent:.2f}%/n"
+    f"GC percentage: {gc_percent:.2f}%/n"
 )
 
 with open(output_file, "w", encoding="utf-8") as f:

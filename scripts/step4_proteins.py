@@ -13,16 +13,16 @@ chromosome_name = record.id
 chromosome_seq = record.seq.upper()
 
 df = pd.read_csv(table_file,sep="\t")
-print(f"Αρχικές γραμμές του πίνακα: {len(df)}")
+print(f"Initial table rows: {len(df)}")
 
-# Φιλτράρισμα: κρατάμε μόνο τις εγγραφές που αντιστοιχούν στο ίδιο χρωμόσωμα με το FASTA
+# Filter to retain only records that correspond to the same chromosome as the FASTA
 filtered_df = df[df["seqname"] == chromosome_name].copy()
-print(f"Παρέλειψα {len(df) - len(filtered_df)} γραμμές με διαφορετικό όνομα χρωμοσώματος από το FASTA ({chromosome_name}).")
+print(f"Skipped {len(df) - len(filtered_df)} rows with a chromosome name different from the FASTA ({chromosome_name}).")
 
 df = filtered_df.sort_values(by=["gene_id", "start"])
 
 protein_records = []
-stats_list = [] # Εδώ θα μαζέψω τα δεδομένα για τον νέο πίνακα
+stats_list = [] # Collect data for the new table here
 
 for gene_id, group in df.groupby("gene_id"):
 
@@ -39,7 +39,7 @@ for gene_id, group in df.groupby("gene_id"):
 
     protein_seq = full_DNA.translate()
 
-    # Αφαιρούμε το τελικό '*' που είναι το stop codon για να έχουμε το σωστό μήκος πρωτεΐνης
+    # Remove the terminal '*' stop codon to obtain the correct protein length
     prot_str = str(protein_seq)
     if prot_str.endswith("*"):
         prot_str = prot_str[:-1]
@@ -61,30 +61,30 @@ for gene_id, group in df.groupby("gene_id"):
         "stop_codons": stop_codons
     })
 
-# 1. Γράφω όλες τις πρωτεΐνες στο αρχείο results/proteins.fa
+# 1. Write all proteins to results/proteins.fa
 SeqIO.write(protein_records, out_fasta, "fasta")
 
-# 2. Φτιάχνω τον πίνακα στατιστικών και τον αποθηκεύω
+# 2. Create the statistics table and save it
 stats_df = pd.DataFrame(stats_list)
 stats_df.to_csv(out_table, sep="\t", index=False)
 
-print(f"Επιτυχία! Μεταφράστηκαν {len(protein_records)} γονίδια και αποθηκεύτηκαν στο {out_fasta}")
+print(f"Success! Translated {len(protein_records)} genes and saved them to {out_fasta}")
 
-#Έλεγχος εξαιρέσεων
+#Exception check
 
 bad_starts = stats_df[stats_df["starts_with_M"]==False]
 bad_stops = stats_df[stats_df["stop_codons"]>0]
 
-print(f"\n---- ΑΝΑΦΟΡΑ ΕΞΑΙΡΕΣΕΩΝ ---")
+print(f"\n---- EXCEPTION REPORT ---")
 
 if not bad_starts.empty:
-    print(f"Βρέθηκαν {len(bad_starts)} γονίδια που δεν ξεκινούν με M:")
+    print(f"Found {len(bad_starts)} genes that do not start with M:")
     print(bad_starts["gene_id"].tolist())
 else:
-    print("Όλα τα γονίδια ξεκινούν σωστά με Μεθειονίνη (M)!")
+    print("All genes start correctly with Methionine (M)!")
 
 if not bad_stops.empty:
-    print(f"Βρέθηκαν {len(bad_stops)} γονίδια που περιέχουν Stop Codons (*):")
+    print(f"Found {len(bad_stops)} genes that contain Stop Codons (*):")
     print(bad_stops["gene_id"].tolist())
 else:
-    print("Κανένα γονίδιο δεν έχει πρόωρα stop codons!")
+    print("No gene contains premature stop codons!")
