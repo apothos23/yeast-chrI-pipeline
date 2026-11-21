@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "=== Starting the dna2protein pipeline ==="
 
 # 1. Delete the old directory to demonstrate that everything is built from scratch

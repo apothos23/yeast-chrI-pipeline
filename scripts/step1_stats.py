@@ -17,9 +17,9 @@ for record in SeqIO.parse(fasta_file, "fasta-blast"):
     print(f"GC percentage: {gc_percent}%")
 
 report = (
-    f"Total length: {total_length} bases/n"
-    f"A: {count_A}, C: {count_C}, T: {count_T}, G: {count_G}/n"
-    f"GC percentage: {gc_percent:.2f}%/n"
+    f"Total length: {total_length} bases\n"
+    f"A: {count_A}, C: {count_C}, T: {count_T}, G: {count_G}\n"
+    f"GC percentage: {gc_percent:.2f}%\n"
 )
 
 with open(output_file, "w", encoding="utf-8") as f:
