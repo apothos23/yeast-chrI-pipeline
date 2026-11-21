@@ -1,4 +1,4 @@
-# dna2protein
+# Yeast Chromosome I Bioinformatics Pipeline
 
 Bioinformatics pipeline for analyzing chromosome I of yeast (*Saccharomyces cerevisiae*). The project uses the DNA sequence and annotation file (GTF) to calculate basic chromosome statistics, extract coding sequences (CDS), translate them into proteins, compare the proteins with BLAST, and generate plots.
 
