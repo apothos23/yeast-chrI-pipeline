@@ -1,1 +1,3 @@
-Total length: 230218 bases/nA: 69836, C: 44641, T: 69975, G: 45766/nGC percentage: 39.27%/n
+Total length: 230218 bases
+A: 69836, C: 44641, T: 69975, G: 45766
+GC percentage: 39.27%
